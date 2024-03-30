@@ -42,6 +42,12 @@ const About = () => {
           porro, dicta ex! Nam delectus expedita nobis repellendus laboriosam,
           aliquam harum!
         </p>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+          magni excepturi, aspernatur vel quis doloribus eaque tempora saepe hic
+          porro, dicta ex! Nam delectus expedita nobis repellendus laboriosam,
+          aliquam harum!
+        </p>
       </div>
       <div>이력서</div>
     </article>
