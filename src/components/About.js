@@ -1,5 +1,6 @@
 import kimtokki from '../assets/images/kimtokkis/증명사진.jpeg';
-// import { useState, useEffect } from 'react';
+import favicon from '../assets/images/favicon.png';
+import { useAuth } from './AuthContext';
 
 const About = () => {
   // const [posts, setPosts] = useState([]);
@@ -23,31 +24,44 @@ const About = () => {
   //     },
   //   ]);
   // }, []);
-
+  const { isLoggedIn } = useAuth();
   return (
     <article className='child:m-10'>
       <h2 className='font-hanna text-center text-xl'>김토끼's</h2>
       <div className='grid grid-cols-2 gap-4'>
-        <div>이름 : 김현석</div>
-        <div>생년월일 : 1986. 2. 13</div>
-        <div>연락처 : 010-3081-7615</div>
-        <div>이메일 : jjangnarana@gmail.com</div>
+        {isLoggedIn ? (
+          <>
+            <div>이름 : 김현석</div>
+            <div>생년월일 : 1986. 2. 13</div>
+            <div>연락처 : 010-3081-7615</div>
+            <div>이메일 : jjangnarana@gmail.com</div>
+          </>
+        ) : (
+          <>
+            <div>이름 : 비밀</div>
+            <div>생년월일 : 비밀</div>
+            <div>연락처 : 비밀</div>
+            <div>이메일 : 비밀</div>
+          </>
+        )}
       </div>
       <div className='flex flex-col justify-center'>
         <h6>자기소개</h6>
-        <img src={kimtokki} width='250' alt='증명사진' />
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas
-          magni excepturi, aspernatur vel quis doloribus eaque tempora saepe hic
-          porro, dicta ex! Nam delectus expedita nobis repellendus laboriosam,
-          aliquam harum!
-        </p>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas
-          magni excepturi, aspernatur vel quis doloribus eaque tempora saepe hic
-          porro, dicta ex! Nam delectus expedita nobis repellendus laboriosam,
-          aliquam harum!
-        </p>
+        {isLoggedIn ? (
+          <img src={kimtokki} width='250' alt='증명사진' />
+        ) : (
+          <img src={favicon} width='250' alt='증명사진' />
+        )}
+        {isLoggedIn ? (
+          <p>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+            magni excepturi, aspernatur vel quis doloribus eaque tempora saepe
+            hic porro, dicta ex! Nam delectus expedita nobis repellendus
+            laboriosam, aliquam harum!
+          </p>
+        ) : (
+          <p>로그인 후 정보를 확인 하세요!</p>
+        )}
       </div>
       <div>이력서</div>
     </article>

@@ -7,22 +7,24 @@ import Utils from './components/Utils';
 import Communication from './components/Communication';
 import NotFound from './components/NotFound';
 import Login from './components/Login';
-
+import { AuthProvider } from './components/AuthContext';
 function App() {
   return (
     <div className='container mx-auto'>
       <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<LayoutWithHeader />}>
-            <Route index element={<Main />}></Route>
-            <Route path='about' element={<About />}></Route>
-            <Route path='projects' element={<Projects />}></Route>
-            <Route path='utils' element={<Utils />}></Route>
-            <Route path='communication' element={<Communication />}></Route>
-            <Route path='login' element={<Login />}></Route>
-          </Route>
-          <Route path='*' element={<NotFound />}></Route>
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path='/' element={<LayoutWithHeader />}>
+              <Route index element={<Main />}></Route>
+              <Route path='about' element={<About />}></Route>
+              <Route path='projects' element={<Projects />}></Route>
+              <Route path='utils' element={<Utils />}></Route>
+              <Route path='communication' element={<Communication />}></Route>
+              <Route path='login' element={<Login />}></Route>
+            </Route>
+            <Route path='*' element={<NotFound />}></Route>
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </div>
   );

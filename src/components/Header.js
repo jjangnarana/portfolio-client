@@ -1,6 +1,14 @@
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/favicon.png';
+import { useAuth } from './AuthContext';
+
 const Header = () => {
+  const { isLoggedIn, setIsLoggedIn, userData } = useAuth();
+
+  const handleLogout = async () => {
+    fetch('http://localhost:3002/logout', { credentials: 'include' });
+    setIsLoggedIn(false);
+  };
   return (
     <header className='grid grid-cols-2 grid-rows-2 justify-center items-center font-inter'>
       <div className='row-start-1 row-end-3 mt-4'>
@@ -14,12 +22,21 @@ const Header = () => {
         </div>
       </div>
       <div className='flex justify-end'>
-        <Link
-          className='text-black font-inter text-sm py-2 3xl mt-10 '
-          to='/login'
-        >
-          로그인
-        </Link>
+        {isLoggedIn ? (
+          <button
+            onClick={handleLogout}
+            className='text-black font-inter text-sm py-2 3xl mt-10'
+          >
+            로그아웃
+          </button>
+        ) : (
+          <Link
+            className='text-black font-inter text-sm py-2 3xl mt-10 '
+            to='/login'
+          >
+            로그인
+          </Link>
+        )}
       </div>
       <nav className='grid grid-rows-2'>
         <div id='nav' className='flex justify-end gap-x-8'>
