@@ -107,10 +107,12 @@ const About = () => {
               body: JSON.stringify(formData),
             })
               .then((response) => response.json())
-              .then((data) => console.log(data))
-              .catch((error) => console.error(error));
-            setRefreshKey((current) => current + 1);
-            navigate('/about');
+              .then((data) => {
+                console.log(data);
+                setRefreshKey((current) => current + 1);
+              })
+              .catch((error) => console.error(error))
+              .finally(navigate('/about'));
           }}
         />
         <div id='resume'>이력서</div>

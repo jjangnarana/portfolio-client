@@ -5,9 +5,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const About = () => {
-  const [about, setAbout] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { isLoggedIn, userData, refreshKey, setRefreshKey } = useAuth();
+  const { isLoggedIn, userData, refreshKey } = useAuth();
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState('');
   const [phone, setPhone] = useState('');
@@ -27,11 +26,12 @@ const About = () => {
           setPhone(aboutData.phone || '');
           setEmail(aboutData.email || '');
           setIntroduction(aboutData.introduction || '');
-          setIsLoading(false);
         }
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   }, [refreshKey]);
