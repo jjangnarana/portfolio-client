@@ -12,7 +12,7 @@ const GoogleLogin = () => {
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setIsLoggedIn, setUser } = useAuth();
+  const { userData, setUser } = useAuth();
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -31,7 +31,7 @@ const Login = () => {
         );
         const data = await response.json();
         setUser(data);
-        setIsLoggedIn(true);
+        // console.log(userData);
         navigate('/');
       } catch (error) {
         console.error(error);

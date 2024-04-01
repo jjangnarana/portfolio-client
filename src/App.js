@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Main from './components/Main';
 import About from './components/About';
+import AboutUpdate from './components/AboutUpdate';
 import Projects from './components/Projects';
 import Utils from './components/Utils';
 import Communication from './components/Communication';
@@ -17,6 +18,7 @@ function App() {
             <Route path='/' element={<LayoutWithHeader />}>
               <Route index element={<Main />}></Route>
               <Route path='about' element={<About />}></Route>
+              <Route path='about/update' element={<AboutUpdate />}></Route>
               <Route path='projects' element={<Projects />}></Route>
               <Route path='utils' element={<Utils />}></Route>
               <Route path='communication' element={<Communication />}></Route>

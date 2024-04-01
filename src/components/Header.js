@@ -3,11 +3,12 @@ import logo from '../assets/images/favicon.png';
 import { useAuth } from './AuthContext';
 
 const Header = () => {
-  const { isLoggedIn, setIsLoggedIn, userData } = useAuth();
+  const { isLoggedIn, setIsLoggedIn, setUserData } = useAuth();
 
   const handleLogout = async () => {
     fetch('http://localhost:3002/logout', { credentials: 'include' });
     setIsLoggedIn(false);
+    setUserData('');
   };
   return (
     <header className='grid grid-cols-2 grid-rows-2 justify-center items-center font-inter'>

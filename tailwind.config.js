@@ -23,9 +23,14 @@ module.exports = {
           '0%, 100%': { borderColor: 'rgba(255, 0, 0, 0.2)' },
           '50%': { borderColor: 'rgba(255, 0, 0, 1)' },
         },
+        spin: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         blink: 'blink 1s ease-in-out infinite',
+        spin: 'spin 1s linear infinite',
       },
     },
   },
