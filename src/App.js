@@ -9,7 +9,8 @@ import Communication from './components/Communication';
 import NotFound from './components/NotFound';
 import Login from './components/Login';
 import { AuthProvider } from './components/AuthContext';
-import CreateProject from './components/CreateProject';
+import ProjectForm from './components/ProjectForm';
+
 function App() {
   return (
     <div className='container mx-auto'>
@@ -21,7 +22,7 @@ function App() {
               <Route path='about' element={<About />}></Route>
               <Route path='about/update' element={<AboutUpdate />}></Route>
               <Route path='projects' element={<Projects />}></Route>
-              <Route path='projects/create' element={<CreateProject />}></Route>
+              <Route path='projects/create' element={<ProjectForm />}></Route>
               <Route path='utils' element={<Utils />}></Route>
               <Route path='communication' element={<Communication />}></Route>
               <Route path='login' element={<Login />}></Route>
