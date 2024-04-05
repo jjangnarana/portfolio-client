@@ -1,4 +1,4 @@
-import { useState, useRef, forwardRef } from 'react';
+import { useState, useRef, forwardRef, useEffect } from 'react';
 import { supabaseCreate } from '../utils';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,7 +29,7 @@ const LabelInput = forwardRef(
         </label>
         {type === 'textarea' && (
           <textarea
-            rows={5}
+            rows={6}
             className={`block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
             name={attribute}
             onChange={onChange}
@@ -83,19 +83,34 @@ const LabelInput = forwardRef(
   }
 );
 
-const ProjectForm = ({ onClose }) => {
+const ProjectForm = ({ mode, onClose }) => {
   const [name, setName] = useState('');
   const [version, setVersion] = useState('1.0.0.0');
   const [description, setDescription] = useState('');
   const [repository, setRepository] = useState('');
   const [url, setUrl] = useState('');
-  const [image_path, setImage_patch] = useState('');
+  const [image_path, setImage_path] = useState('');
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const [preview, setPreview] = useState();
-
+  const [formSubmited, setFormSubmitted] = useState(false);
   const fileInputRef = useRef(null);
 
+  useEffect(() => {
+    if (formSubmited && image_path) {
+      const formData = {
+        name,
+        version,
+        repository,
+        url,
+        description,
+        image_path, // Now this will have the updated value
+      };
+      // Now call the API with the formData
+      supabaseCreate('projects/create/', formData, () => navigate('/'));
+      setFormSubmitted(false); // Reset the form submitted flag
+    }
+  }, [image_path, formSubmited]);
   const handleClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -142,6 +157,32 @@ const ProjectForm = ({ onClose }) => {
     event.preventDefault();
   };
 
+  const handleSave = async () => {
+    const imgPath = await uploadImg();
+    if (imgPath) {
+      setImage_path(imgPath);
+      setFormSubmitted(true);
+    } else {
+      // Handle the error if imgPath is not returned
+      console.error('Failed to upload image');
+    }
+  };
+  const uploadImg = async () => {
+    const formData = new FormData();
+    formData.append('image', files[0]); // 'files' 상태에서 첫 번째 파일을 선택
+
+    const response = await fetch('http://localhost:3002/uploadimg', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.imgPath) {
+      return data.imgPath;
+    }
+    return null;
+  };
   return (
     <div className='fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center'>
       <div className='bg-white p-5 rounded-lg shadow-lg max-w-2xl w-full'>
@@ -189,7 +230,6 @@ const ProjectForm = ({ onClose }) => {
             placeholder={'github repository 주소를 입력하세요'}
           ></LabelInput>
           <LabelInput
-            className={'col-start-1'}
             labelName={'사이트URL'}
             attribute={'url'}
             value={url}
@@ -199,7 +239,7 @@ const ProjectForm = ({ onClose }) => {
             placeholder={'호스팅 url을 입력하세요'}
           ></LabelInput>
           <LabelInput
-            className={'row-start-3 col-start-2 row-span-2'}
+            className={'col-span-2'}
             type={'textarea'}
             labelName={'프로젝트내용'}
             attribute={'description'}
@@ -212,10 +252,7 @@ const ProjectForm = ({ onClose }) => {
         </div>
         <div className='grid grid-cols-4 gap-2'>
           <button
-            onClick={() => {
-              const formData = { name, version, repository, url, description };
-              supabaseCreate('projects/create/', formData, navigate('/'));
-            }}
+            onClick={handleSave}
             className='col-start-3 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-150'
           >
             저장

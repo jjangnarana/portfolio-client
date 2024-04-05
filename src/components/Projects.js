@@ -65,7 +65,7 @@ const Projects = () => {
               <div>프로젝트 이름 : {project.name}</div>
               <div className='relative group row-span-5 cursor-pointer'>
                 <img
-                  src={portfolio}
+                  src={project.image_path}
                   alt={`${project.name}에 대한 그림설명`}
                   className={`${isModifyMode ? 'opacity-0' : 'opacity-100'}`}
                 />
@@ -93,7 +93,17 @@ const Projects = () => {
             </li>
             {isModifyMode && selectedProject === project && (
               <div className='absolute inset-0 z-20 flex justify-center items-center gap-2'>
-                <Button color='green' value='수정'></Button>
+                <Button
+                  onClick={() => setModalOpen(true)}
+                  color='green'
+                  value='수정'
+                ></Button>
+                {isModalOpen && (
+                  <ProjectForm
+                    mode={'modify'}
+                    onClose={() => setModalOpen(false)}
+                  />
+                )}
                 <Button color='red' value='삭제'></Button>
               </div>
             )}

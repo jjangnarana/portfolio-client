@@ -14,7 +14,7 @@ export const supabaseCreate = (path, formData, navigate) => {
     .finally(navigate);
 };
 
-export const supabaseModify = (path, formData) => {
+export const supabaseGet = (path, formData) => {
   fetch(`http://localhost:3002/${path}`, {
     method: 'POST',
     headers: {
