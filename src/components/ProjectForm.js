@@ -1,5 +1,5 @@
 import { useState, useRef, forwardRef, useEffect } from 'react';
-import { supabaseCreate } from '../utils';
+import { supabaseCreate, supabaseGet, supabaseUpdate } from '../utils';
 import { useNavigate } from 'react-router-dom';
 
 const LabelInput = forwardRef(
@@ -83,7 +83,8 @@ const LabelInput = forwardRef(
   }
 );
 
-const ProjectForm = ({ mode, onClose }) => {
+const ProjectForm = ({ mode, onClose, p_id }) => {
+  const [id, setId] = useState();
   const [name, setName] = useState('');
   const [version, setVersion] = useState('1.0.0.0');
   const [description, setDescription] = useState('');
@@ -109,8 +110,48 @@ const ProjectForm = ({ mode, onClose }) => {
       // Now call the API with the formData
       supabaseCreate('projects/create/', formData, () => navigate('/'));
       setFormSubmitted(false); // Reset the form submitted flag
+    } else if (formSubmited && image_path && mode === 'modify') {
+      const formData = {
+        id,
+        name,
+        version,
+        repository,
+        url,
+        description,
+        image_path, // Now this will have the updated value
+      };
+      // Now call the API with the formData
+      supabaseUpdate('projects/update/', formData, () => navigate('/'));
+      setFormSubmitted(false); // Reset the form submitted flag
     }
   }, [image_path, formSubmited]);
+
+  useEffect(() => {
+    if (mode === 'modify' && p_id) {
+      // Call the async function and wait for it to resolve before setting state
+      (async () => {
+        try {
+          const projectData = await supabaseGet(p_id);
+          if (projectData) {
+            setId(projectData.id);
+            setName(projectData.name);
+            setVersion(projectData.version);
+            setDescription(projectData.description);
+            setRepository(projectData.repository);
+            setUrl(projectData.url);
+            setImage_path(projectData.image_path);
+            setPreview(projectData.image_path);
+          } else {
+            console.log('No project data returned for the given ID.');
+          }
+        } catch (error) {
+          console.error('Error fetching project data:', error);
+        }
+      })();
+    }
+  }, [p_id, mode]);
+
+  console.log(preview);
   const handleClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -183,6 +224,7 @@ const ProjectForm = ({ mode, onClose }) => {
     }
     return null;
   };
+
   return (
     <div className='fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center'>
       <div className='bg-white p-5 rounded-lg shadow-lg max-w-2xl w-full'>
@@ -255,7 +297,7 @@ const ProjectForm = ({ mode, onClose }) => {
             onClick={handleSave}
             className='col-start-3 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-150'
           >
-            저장
+            {mode === 'create' ? '저장' : '수정'}
           </button>
           <button
             onClick={onClose}

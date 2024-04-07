@@ -43,8 +43,21 @@ const Projects = () => {
           value={!isModifyMode ? 'MODE' : '해제'}
           onClick={() => setModifyMode((current) => !current)}
         ></Button>
-        <Button value='추가' onClick={() => setModalOpen(true)}></Button>
-        {isModalOpen && <ProjectForm onClose={() => setModalOpen(false)} />}
+        <Button
+          value='추가'
+          onClick={() => {
+            setModalOpen(true);
+            setModifyMode((current) => !current);
+          }}
+        ></Button>
+        {isModalOpen && (
+          <ProjectForm
+            key={selectedProject ? selectedProject.id : 'new'}
+            mode={isModifyMode ? 'modify' : 'create'}
+            p_id={selectedProject ? selectedProject.id : null}
+            onClose={() => setModalOpen(false)}
+          />
+        )}
       </div>
       <ul className={''}>
         {projects.map((project) => (
@@ -75,7 +88,7 @@ const Projects = () => {
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleImageClick(portfolio);
+                      handleImageClick(project.image_path);
                     }}
                     className={''}
                   >
@@ -100,7 +113,9 @@ const Projects = () => {
                 ></Button>
                 {isModalOpen && (
                   <ProjectForm
-                    mode={'modify'}
+                    key={selectedProject ? selectedProject.id : 'new'}
+                    mode={isModifyMode ? 'modify' : 'create'}
+                    p_id={selectedProject ? selectedProject.id : null}
                     onClose={() => setModalOpen(false)}
                   />
                 )}
